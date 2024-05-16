@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amagana.Controller.SobreController">
+   <children>
+      <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="284.0" prefWidth="601.0" style="-fx-background-color: #F2EBDF;">
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="14.0" layoutY="49.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Image/mensaje.png" />
+               </image>
+            </ImageView>
+            <TextArea layoutX="201.0" layoutY="42.0" prefHeight="203.0" prefWidth="373.0" style="-fx-background-color: #F2EBDF;" text="Sistema de Ventas&#10;Autor: Angel Leonel Magaña Torres&#10;E-mail: amagana-2023257@kinal.edu.gt&#10;&#10;Desarrollada como material de  &#10;aprendizaje de Java. ">
+               <font>
+                  <Font name="Arial Black" size="13.0" />
+               </font>
+            </TextArea>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

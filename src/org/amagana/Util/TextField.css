@@ -1,0 +1,37 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 24-abr-2024, 23:21:57
+    Author     : angel
+*/
+
+.text-field {
+    -fx-background-color: #F2EBDF; /* Color de fondo */
+    -fx-padding: 8px; /* Espacio alrededor del texto */
+    -fx-font-family: "Arial"; /* Familia de fuente */
+    -fx-font-size: 14px; /* Tamaño de fuente */
+    -fx-text-fill: #024959; /* Color de texto */
+    -fx-prompt-text-fill: #F26F63; /* Color del texto de marcador */
+    -fx-alignment: center; /* Alineación horizontal y vertical */
+    -fx-border-color: #CCCCCC; /* Color del borde */
+    -fx-border-width: 2px; /* Ancho del borde */
+    -fx-border-radius: 5px; /* Radio del borde */
+    -fx-background-radius: 5px; /* Radio de fondo */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 0); /* Efecto de sombra */
+}
+
+.text-field:focused {
+    -fx-border-color: #024959; /* Color del borde cuando está enfocado */
+}
+
+.text-field:hover {
+    -fx-border-color: #0078D7; /* Color del borde al pasar el mouse */
+}
+
+.text-field:disabled {
+    -fx-opacity: 0.5; /* Opacidad cuando está deshabilitado */
+    -fx-background-color: #CCCCCC; /* Color de fondo cuando está deshabilitado */
+}

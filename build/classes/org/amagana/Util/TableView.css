@@ -1,0 +1,36 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 24-abr-2024, 23:23:50
+    Author     : angel
+*/
+
+/* Estilos para TableView */
+.table-view {
+    -fx-background-color: #B3E7F2; /* Color de fondo de la tabla */
+}
+
+/* Estilos para las celdas de encabezado */
+.table-view .column-header-background {
+    -fx-background-color: #024959; /* Color de fondo del encabezado */
+    -fx-text-fill: #8DD5F2; /* Color de texto del encabezado */
+}
+
+/* Estilos para las celdas de datos */
+.table-view .cell {
+    -fx-text-fill: #025373; /* Color de texto de las celdas */
+}
+
+/* Estilos para las líneas divisorias entre filas y columnas */
+.table-view .column-header, .table-view .table-row-cell {
+    -fx-border-color: #F2EBDF; /* Color de las líneas divisorias */
+    -fx-border-width: 1px; /* Ancho de las líneas divisorias */
+}
+
+/* Estilos para el texto seleccionado */
+.table-row-cell:selected .text {
+    -fx-fill: #ffffff; /* Color del texto seleccionado */
+}

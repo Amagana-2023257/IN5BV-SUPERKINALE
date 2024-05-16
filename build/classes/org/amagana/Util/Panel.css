@@ -1,0 +1,20 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 24-abr-2024, 23:25:00
+    Author     : angel
+*/
+
+/* Estilos para el panel */
+.panel {
+    -fx-background-color: #F2EBDF; /* Color de fondo */
+    -fx-padding: 20px; /* Espacio alrededor del panel */
+    -fx-border-color: #CCCCCC; /* Color del borde */
+    -fx-border-width: 2px; /* Ancho del borde */
+    -fx-border-radius: 5px; /* Radio del borde */
+    -fx-background-radius: 10px; /* Radio de fondo */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 0); /* Efecto de sombra */
+}

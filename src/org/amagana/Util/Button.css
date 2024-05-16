@@ -1,0 +1,34 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 24-abr-2024, 23:23:50
+    Author     : angel
+*/
+
+.button {
+    -fx-background-color: #024959; /* Color de fondo */
+    -fx-text-fill: #F2EBDF; /* Color de texto */
+    -fx-font-family: "Arial"; /* Familia de fuente */
+    -fx-font-size: 20px; /* Tamaño de fuente */
+    -fx-font-weight: bold; /* Grosor de fuente */
+    -fx-padding: 8px 16px; /* Espacio alrededor del texto */
+    -fx-background-radius: 5px; /* Radio de fondo */
+    -fx-border-radius: 5px; /* Radio del borde */
+    -fx-border-color: #8DD5F2; /* Color del borde */
+    -fx-border-width: 2px; /* Ancho del borde */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 0); /* Efecto de sombra */
+}
+
+.button:hover {
+    -fx-background-color: #025373; /* Color de fondo al pasar el mouse */
+    -fx-border-color: #B3E7F2; /* Color del borde al pasar el mouse */
+    -fx-font-size: 30px; /* Tamaño de fuente */
+}
+
+.button:pressed {
+    -fx-background-color: #025959; /* Color de fondo al presionar */
+    -fx-border-color: #F26F63; /* Color del borde al presionar */
+}

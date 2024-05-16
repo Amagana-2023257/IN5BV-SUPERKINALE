@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amagana.Controller.LoginController">
+    <children>
+        <VBox layoutX="557.0" layoutY="61.0" prefHeight="536.0" prefWidth="363.0" styleClass="BVox" stylesheets="@../Util/VBox.css" AnchorPane.leftAnchor="557.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="61.0">
+            <children>
+            <Label stylesheets="@../Util/fondo.css" text="Login" />
+                <Label prefHeight="47.0" prefWidth="343.0" stylesheets="@../Util/Label.css" text="Usuario:" textFill="#024959">
+                    <font>
+                        <Font name="Arial Black" size="20.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="txtUsuario" prefHeight="44.0" prefWidth="296.0" styleClass="text-field" stylesheets="@../Util/TextField.css">
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="Arial Black" size="20.0" />
+               </font></TextField>
+                <Label prefHeight="47.0" prefWidth="346.0" stylesheets="@../Util/Label.css" text="Contraseña:" textFill="#024959">
+                    <font>
+                        <Font name="Arial Black" size="20.0" />
+                    </font>
+                </Label>
+                <PasswordField fx:id="txtContrasenia" prefHeight="50.0" prefWidth="296.0" styleClass="text-field" stylesheets="@../Util/TextField.css">
+               <font>
+                  <Font name="Arial Black" size="20.0" />
+               </font></PasswordField>
+            </children>
+        </VBox>
+        <Button fx:id="btnLogin" layoutX="574.0" layoutY="531.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="56.0" prefWidth="341.0" stylesheets="@../Util/Button.css" text="Login" textFill="WHITE" AnchorPane.leftAnchor="574.0" AnchorPane.rightAnchor="8.0">
+            <font>
+                <Font name="Arial Black" size="25.0" />
+            </font>
+        </Button>
+      <Pane layoutX="8.0" layoutY="2.0" prefHeight="56.0" prefWidth="327.0" style="-fx-background-color: #F26F63;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+                <Label text=" SuperMarket" textFill="#f2ebdf">
+                    <font>
+                        <Font name="Arial Black" size="30.0" />
+                    </font>
+                </Label>
+         </children>
+      </Pane>
+      <Pane layoutY="56.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="549.0" prefWidth="564.0" styleClass="panel" stylesheets="@../Util/Panel.css">
+         <children>
+            <ImageView fitHeight="496.0" fitWidth="529.0" layoutX="17.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Image/_6bd7e0cb-9b86-4cda-856d-5bb2ae95b68b-Photoroom.png-Photoroom.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+    </children>
+</AnchorPane>
