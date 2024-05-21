@@ -723,4 +723,102 @@ CALL sp_crear_usuario('a', 'Perez', 'Administrador', '1');
 
 set global time_zone = '-6:00';
 
+-- Funciones
+
+DELIMITER $$
+
+CREATE FUNCTION CalcularPreciosProductos(total DECIMAL(10,2), cantidad INT)
+RETURNS DECIMAL(10,2)
+DETERMINISTIC
+BEGIN
+    DECLARE precio DECIMAL(10,2);
+    SET precio = total / cantidad;
+    RETURN precio;
+END ;
+
+CREATE FUNCTION CalcularExistenciaProductos(idProducto INT, cantidad INT)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE existenciaActual INT;
+    SELECT existencia INTO existenciaActual FROM Producto WHERE id = idProducto;
+    SET existenciaActual = existenciaActual + cantidad;
+    RETURN existenciaActual;
+END $$
+
+DELIMITER ;
+
+
+-- Triggers
+
+DELIMITER $$
+
+CREATE TRIGGER TriggerDetalleCompra AFTER INSERT ON DetalleCompra
+FOR EACH ROW
+BEGIN
+    DECLARE totalCompra DECIMAL(10,2);
+    DECLARE cantidadCompra INT;
+    DECLARE idProducto INT;
+
+    SELECT costoU, cantidad, producto INTO totalCompra, cantidadCompra, idProducto FROM DetalleCompra WHERE id = NEW.id;
+
+    -- Actualizar precios de productos
+    UPDATE Producto
+    SET precioU = CalcularPreciosProductos(totalCompra, cantidadCompra),
+        precioD = CalcularPreciosProductos(totalCompra * 12, cantidadCompra * 12),
+        precioM = CalcularPreciosProductos(totalCompra * 20, cantidadCompra * 20)
+    WHERE id = idProducto;
+
+    -- Actualizar existencia de productos
+    UPDATE Producto
+    SET existencia = CalcularExistenciaProductos(idProducto, cantidadCompra)
+    WHERE id = idProducto;
+END $$
+
+CREATE TRIGGER TriggerDetalleFactura BEFORE INSERT ON DetalleFactura
+FOR EACH ROW
+BEGIN
+    DECLARE idProducto INT;
+
+    SELECT producto INTO idProducto FROM DetalleFactura WHERE id = NEW.id;
+
+    -- Obtener precio unitario del producto
+    SELECT precioU INTO NEW.precioU FROM Producto WHERE id = idProducto;
+END ;
+
+CREATE TRIGGER TriggerTotalDocumento AFTER INSERT ON DetalleCompra
+FOR EACH ROW
+BEGIN
+    DECLARE totalDocumento DECIMAL(10,2);
+    DECLARE idCompra INT;
+
+    SELECT compra INTO idCompra FROM DetalleCompra WHERE id = NEW.id;
+
+    -- Calcular total del documento
+    SELECT SUM(costoU * cantidad) INTO totalDocumento FROM DetalleCompra WHERE compra = idCompra;
+
+    -- Actualizar total del documento en Compra
+    UPDATE Compra
+    SET total = totalDocumento
+    WHERE id = idCompra;
+END ;
+
+CREATE TRIGGER TriggerTotalFactura AFTER INSERT ON DetalleFactura
+FOR EACH ROW
+BEGIN
+    DECLARE totalFactura DECIMAL(10,2);
+    DECLARE idFactura INT;
+
+    SELECT factura INTO idFactura FROM DetalleFactura WHERE id = NEW.id;
+
+    -- Calcular total de la factura
+    SELECT SUM(precioU * cantidad) INTO totalFactura FROM DetalleFactura WHERE factura = idFactura;
+
+    -- Actualizar total de la factura en Factura
+    UPDATE Factura
+    SET total = totalFactura
+    WHERE id = idFactura;
+END 
+
+DELIMITER ;
 
