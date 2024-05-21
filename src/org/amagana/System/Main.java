@@ -14,6 +14,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.amagana.Controller.ClienteController;
 import org.amagana.Controller.CompraController;
+import org.amagana.Controller.EmpleadoController;
 import org.amagana.Controller.LoginController;
 import org.amagana.Controller.MenuController;
 import org.amagana.Controller.ProductoController;
@@ -169,6 +170,16 @@ public class Main extends Application {
         try {
             CompraController compraView = (CompraController) cambiarEscena("CompraView.fxml", 1121, 594);
             compraView.setMain(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    public void empleadoView() {
+        try {
+            EmpleadoController sobreView = (EmpleadoController) cambiarEscena("EmpleadoView.fxml", 1200, 600);
+            sobreView.setMain(this);
         } catch (Exception e) {
             e.printStackTrace();
         }

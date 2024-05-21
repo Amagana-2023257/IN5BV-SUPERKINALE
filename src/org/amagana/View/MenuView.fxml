@@ -38,6 +38,11 @@
                               <KeyCodeCombination alt="ANY" code="F1" control="UP" meta="UP" shift="UP" shortcut="UP" />
                            </accelerator>
                         </MenuItem>
+                        <MenuItem fx:id="btnEmpleado" mnemonicParsing="false" onAction="#handleButtonAction" text="Empleado">
+                           <accelerator>
+                              <KeyCodeCombination alt="ANY" code="F2" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
                      </items>
                   </Menu>
                </menus>

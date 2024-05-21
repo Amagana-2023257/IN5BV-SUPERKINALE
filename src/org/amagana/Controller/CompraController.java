@@ -3,6 +3,7 @@ package org.amagana.Controller;
 // */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/* IMPORTACIONES */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
 import java.net.URL;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -17,8 +18,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javax.swing.JOptionPane;
+import java.time.LocalDate;
 import org.amagana.DB.Conexion;
 import org.amagana.Bean.Cliente;
+import org.amagana.Bean.Compra;
 import org.amagana.Controller.Notificacion;
 import org.amagana.System.Main;
 
@@ -32,7 +35,7 @@ import org.amagana.System.Main;
  * #%%%%%%%%%%#==%%%%%%%%%%%%. -%%%%%%%%%%%*=#%%%%%%%%%%+
  * .*%%%%%%%%%*====#%%%%%%%#: .=%%%%%%%#=======#%%%%%%+. =%%%%%*=========+%%%%%.
  * +*++==============++. .:================-. .-=============:. .:==========-.
- * .:======-. .:--:.  *
+ * .:======-. .:--:. *
  */
 public class CompraController implements Initializable {
 
@@ -51,16 +54,16 @@ public class CompraController implements Initializable {
     @FXML
     private Button btnMenu, btnAgregar, btnEliminar, btnEditar, btnReportes;
     @FXML
-    private TextField txtId, txtDescripcion, txtTotal, txtDetalleProducto;
+    private TextField txtId, txtDescripcion, txtTotal, txtDetalleProducto, txtIdProducto, txtCantidad, txtPrecioUnitario;
     @FXML
     private DatePicker dpFechaCompra;
     @FXML
     private TableView tblCompras;
     @FXML
-    private TableColumn colId, colDescripcion, colTotal, colDetalleProducto, colFechaCompra;
+    private TableColumn colId, colDescripcion, colTotal, colDetalleProducto, colFechaCompra, colIdDetalle, colCostoUnitario, colCantidad, colNombreProducto;
 
     // */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*  VARIABLE DE TABLE  */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
-    private ObservableList<Cliente> listaCompra;
+    private ObservableList<Compra> listaCompras;
 
 // GET AND SET
     public Main getMain() {
@@ -99,7 +102,7 @@ public class CompraController implements Initializable {
                 tipoDeOperaciones = operaciones.ACTUALIZAR;
                 break;
             case ACTUALIZAR:
-                crearCliente();
+                crearCompra();
                 notificacion.mostrarNotificacion("CLIENTE CREADO CON EXITO!!");
                 desactivarControles();
                 limpiarControles();
@@ -121,11 +124,11 @@ public class CompraController implements Initializable {
                 tipoDeOperaciones = operaciones.NINGUNO;
                 break;
             default:
-                if (tblClientes.getSelectionModel().getSelectedItem() != null) {
+                if (tblCompras.getSelectionModel().getSelectedItem() != null) {
                     int respuesta = JOptionPane.showConfirmDialog(null, "Confirmar Si eliminar el Cliente UwU's", "Eliminar Cliente", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                     if (respuesta == JOptionPane.YES_NO_OPTION) {
-                        eliminarCliente(((Cliente) tblClientes.getSelectionModel().getSelectedItem()).getNit());
-                        listaClientes.remove(tblClientes.getSelectionModel().getSelectedItem());
+                        eliminarCompra(((Compra) tblCompras.getSelectionModel().getSelectedItem()).getId());
+                        listaCompras.remove(tblCompras.getSelectionModel().getSelectedItem());
                         limpiarControles();
                     }
                 } else {
@@ -138,20 +141,20 @@ public class CompraController implements Initializable {
     public void editar() {
         switch (tipoDeOperaciones) {
             case NINGUNO:
-                if (tblClientes.getSelectionModel().getSelectedItem() != null) {
+                if (tblCompras.getSelectionModel().getSelectedItem() != null) {
                     btnEditar.setText("Actualizar");
                     btnReportes.setText("Cancelar");
                     btnAgregar.setDisable(true);
                     btnEliminar.setDisable(true);
                     activarControles();
-                    txtNitC.setEditable(false);
+                    txtId.setEditable(false);
                     tipoDeOperaciones = operaciones.ACTUALIZAR;
                 } else {
                     JOptionPane.showMessageDialog(null, "Selecciona a uno BB");
                 }
                 break;
             case ACTUALIZAR:
-                actualizarCliente();
+                actualizarCompra();
                 btnEditar.setText("Editar");
                 btnReportes.setText("Reportes");
                 btnAgregar.setDisable(false);
@@ -182,80 +185,96 @@ public class CompraController implements Initializable {
     }
 
     // Controles de la tabla
-    // */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/* LISTA CLIENTES*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
+    // */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/* LISTA COMPRAS*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
     public void cargarDatos() {
-        tblClientes.setItems(getClientes());
-        colNit.setCellValueFactory(new PropertyValueFactory<Cliente, Integer>("nit"));
-        colNombre.setCellValueFactory(new PropertyValueFactory<Cliente, String>("nombre"));
-        colApellido.setCellValueFactory(new PropertyValueFactory<Cliente, String>("apellido"));
-        colCorreo.setCellValueFactory(new PropertyValueFactory<Cliente, String>("email"));
-        colTelefono.setCellValueFactory(new PropertyValueFactory<Cliente, Integer>("telefono"));
-        colDireccion.setCellValueFactory(new PropertyValueFactory<Cliente, Integer>("direccion"));
+        tblCompras.setItems(getCompras());
+        colId.setCellValueFactory(new PropertyValueFactory<Compra, Integer>("id"));
+        colDescripcion.setCellValueFactory(new PropertyValueFactory<Compra, String>("descripcion"));
+        colTotal.setCellValueFactory(new PropertyValueFactory<Compra, Double>("total"));
+        colDetalleProducto.setCellValueFactory(new PropertyValueFactory<Compra, String>("detalleProducto"));
+        colFechaCompra.setCellValueFactory(new PropertyValueFactory<Compra, LocalDate>("fechaCompra"));
+        // Agregar las columnas faltantes aquí
+        colIdDetalle.setCellValueFactory(new PropertyValueFactory<Compra, Integer>("idDetalleCompra"));
+        colCostoUnitario.setCellValueFactory(new PropertyValueFactory<Compra, Double>("costoU"));
+        colCantidad.setCellValueFactory(new PropertyValueFactory<Compra, Integer>("cantidad"));
+        colNombreProducto.setCellValueFactory(new PropertyValueFactory<Compra, String>("nombreProducto"));
     }
 
     // */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/* SABER CUAL CLIENTE ESTA SELECCIONADO */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
     public void seleccionarElementos() {
-        txtNitC.setText(String.valueOf(((Cliente) tblClientes.getSelectionModel().getSelectedItem()).getNit()));
-        txtNombreC.setText(((Cliente) tblClientes.getSelectionModel().getSelectedItem()).getNombre());
-        txtApellidoC.setText(((Cliente) tblClientes.getSelectionModel().getSelectedItem()).getApellido());
-        txtCorreoC.setText(((Cliente) tblClientes.getSelectionModel().getSelectedItem()).getEmail());
-        txtTelefonoC.setText(((Cliente) tblClientes.getSelectionModel().getSelectedItem()).getTelefono());
-        txtDireccionC.setText(((Cliente) tblClientes.getSelectionModel().getSelectedItem()).getDireccion());
+        txtId.setText(String.valueOf(((Compra) tblCompras.getSelectionModel().getSelectedItem()).getId()));
+        txtDescripcion.setText(((Compra) tblCompras.getSelectionModel().getSelectedItem()).getDescripcion());
+        txtTotal.setText(String.valueOf(((Compra) tblCompras.getSelectionModel().getSelectedItem()).getTotal()));
+        txtDetalleProducto.setText(((Compra) tblCompras.getSelectionModel().getSelectedItem()).getProductoS());
+        txtIdProducto.setText(String.valueOf(((Compra) tblCompras.getSelectionModel().getSelectedItem()).getProducto()));
+        txtCantidad.setText(String.valueOf(((Compra) tblCompras.getSelectionModel().getSelectedItem()).getCantidad()));
+        txtPrecioUnitario.setText(String.valueOf(((Compra) tblCompras.getSelectionModel().getSelectedItem()).getCostoU()));
+        dpFechaCompra.setValue(((Compra) tblCompras.getSelectionModel().getSelectedItem()).getFecha());
     }
 
     //  Control de los textField
     // */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/* DESACTIVA LOS TXTFIELD */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
     public void desactivarControles() {
-        txtNitC.setEditable(false);
-        txtNombreC.setEditable(false);
-        txtApellidoC.setEditable(false);
-        txtCorreoC.setEditable(false);
-        txtTelefonoC.setEditable(false);
-        txtDireccionC.setEditable(false);
+        txtId.setEditable(false);
+        txtDescripcion.setEditable(false);
+        txtTotal.setEditable(false);
+        txtDetalleProducto.setEditable(false);
+        txtIdProducto.setEditable(false);
+        txtCantidad.setEditable(false);
+        txtPrecioUnitario.setEditable(false);
+        dpFechaCompra.setDisable(true);
     }
 
     // */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/* ACTIVA LOS TXTFIELD */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
     public void activarControles() {
-        txtNitC.setEditable(true);
-        txtNombreC.setEditable(true);
-        txtApellidoC.setEditable(true);
-        txtCorreoC.setEditable(true);
-        txtTelefonoC.setEditable(true);
-        txtDireccionC.setEditable(true);
+        txtId.setEditable(true);
+        txtDescripcion.setEditable(true);
+        txtTotal.setEditable(true);
+        txtDetalleProducto.setEditable(true);
+        txtIdProducto.setEditable(true);
+        txtCantidad.setEditable(true);
+        txtPrecioUnitario.setEditable(true);
+        dpFechaCompra.setDisable(false);
     }
 
     // */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/* LIMPIA LOS TXTFIELD */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
     public void limpiarControles() {
-        txtNitC.clear();
-        txtNombreC.clear();
-        txtApellidoC.clear();
-        txtCorreoC.clear();
-        txtTelefonoC.clear();
-        txtDireccionC.clear();
+        txtId.clear();
+        txtDescripcion.clear();
+        txtTotal.clear();
+        txtDetalleProducto.clear();
+        txtIdProducto.clear();
+        txtCantidad.clear();
+        txtPrecioUnitario.clear();
+        dpFechaCompra.setValue(null);
     }
 
     // PROCEDIMIENTOS ALMACENADOS
     // */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/* CREAR CLIENTE */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
-    public void crearCliente() {
-
-        Cliente c = new Cliente();
-        c.setNit(Integer.parseInt(txtNitC.getText()));
-        c.setNombre(txtNombreC.getText());
-        c.setApellido(txtApellidoC.getText());
-        c.setDireccion(txtDireccionC.getText());
-        c.setEmail(txtCorreoC.getText());
-        c.setTelefono(txtTelefonoC.getText());
+    public void crearCompra() {
+        // Crear un objeto Compra y establecer sus atributos
+        Compra compra = new Compra();
+        compra.setFecha(dpFechaCompra.getValue());
+        compra.setDescripcion(txtDescripcion.getText());
+        compra.setTotal(Double.parseDouble(txtTotal.getText()));
+        compra.setFecha(dpFechaCompra.getValue());
+        compra.setProducto(Integer.parseInt(txtIdProducto.getText()));
+        compra.setCantidad(Integer.parseInt(txtCantidad.getText()));
+        compra.setCostoU(Integer.parseInt(txtPrecioUnitario.getText()));
 
         try {
-            PreparedStatement sp = Conexion.getInstance().getConexion().prepareCall("CALL sp_crear_cliente(?, ?, ?, ?, ?, ?)");
-            sp.setInt(1, c.getNit());
-            sp.setString(2, c.getNombre());
-            sp.setString(3, c.getApellido());
-            sp.setString(4, c.getEmail());
-            sp.setString(5, c.getTelefono());
-            sp.setString(6, c.getDireccion());
+            // Preparar la llamada al procedimiento almacenado para crear una compra con detalle
+            CallableStatement sp = Conexion.getInstance().getConexion().prepareCall("{CALL sp_crear_compra_con_detalle(?, ?, ?, ?, ?, ?)}");
+            sp.setDate(1, java.sql.Date.valueOf(compra.getFecha()));
+            sp.setString(2, compra.getDescripcion());
+            sp.setDouble(3, compra.getTotal());
+            sp.setInt(4, compra.getProducto());
+            sp.setInt(5, compra.getCantidad());
+            sp.setDouble(6, compra.getCostoU());
+
+            // Ejecutar el procedimiento almacenado
             sp.execute();
-            listaClientes.add(c);
+            cargarDatos();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
@@ -263,57 +282,68 @@ public class CompraController implements Initializable {
 
     // */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/* ACTUALIZAR CLIENTE */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
     // se llama a el procedimiento sp_actualizar_cliente
-    public void actualizarCliente() {
-        try {
-            PreparedStatement sp = Conexion.getInstance().getConexion().prepareCall("CALL sp_actualizar_cliente(?, ?, ?, ?, ?, ?)");
-            Cliente c = (Cliente) tblClientes.getSelectionModel().getSelectedItem();
-            c.setNombre(txtNombreC.getText());
-            c.setApellido(txtApellidoC.getText());
-            c.setEmail(txtCorreoC.getText());
-            c.setTelefono(txtTelefonoC.getText());
-            c.setDireccion(txtDireccionC.getText());
+    public void actualizarCompra() {
+        Compra compra = new Compra();
+        compra.setId(Integer.parseInt(txtId.getText()));
+        compra.setFecha(dpFechaCompra.getValue());
+        compra.setDescripcion(txtDescripcion.getText());
+        compra.setTotal(Double.parseDouble(txtTotal.getText()));
+        compra.setFecha(dpFechaCompra.getValue());
+        compra.setProducto(Integer.parseInt(txtId.getText()));
+        compra.setCantidad(Integer.parseInt(txtCantidad.getText()));
+        compra.setCostoU(Double.parseDouble(txtPrecioUnitario.getText()));
 
-            sp.setInt(1, c.getNit());
-            sp.setString(2, c.getNombre());
-            sp.setString(3, c.getApellido());
-            sp.setString(4, c.getEmail());
-            sp.setString(5, c.getTelefono());
-            sp.setString(6, c.getDireccion());
-            sp.execute();
+        try {
+            Connection conexion = Conexion.getInstance().getConexion(); // Obtener conexión
+            // Llamar al procedimiento almacenado
+            PreparedStatement procedimiento = conexion.prepareStatement("{call sp_actualizar_compra(?, ?, ?, ?, ?, ?, ?)}");
+            // Establecer los parámetros del procedimiento almacenado
+            procedimiento.setInt(1, compra.getId());
+            procedimiento.setDate(2, java.sql.Date.valueOf(compra.getFecha()));
+            procedimiento.setString(3, compra.getDescripcion());
+            procedimiento.setDouble(4, compra.getTotal());
+            procedimiento.setDouble(5, compra.getCostoU());
+            procedimiento.setInt(6, compra.getCantidad());
+            procedimiento.setInt(7, compra.getProducto());
+            // Ejecutar el procedimiento almacenado
+            procedimiento.executeUpdate();
+            System.out.println("Compra actualizada correctamente.");
+            cargarDatos();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
+            e.printStackTrace();
         }
     }
 
     // */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/* LISTAR CLIENTES */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
     // se llama a el procedimiento sp_listar_cliente 
-    public ObservableList<Cliente> getClientes() {
-        ArrayList<Cliente> lista = new ArrayList<>();
+    public ObservableList<Compra> getCompras() {
+        ArrayList<Compra> lista = new ArrayList<>();
         try {
-            PreparedStatement sp = Conexion.getInstance().getConexion().prepareCall("CALL sp_listar_clientes()");
-            ResultSet resultado = sp.executeQuery();
+            CallableStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_listar_compras_con_detalle()}");
+            ResultSet resultado = procedimiento.executeQuery();
             while (resultado.next()) {
-                lista.add(new Cliente(resultado.getInt("nit"),
-                        resultado.getString("nombre"),
-                        resultado.getString("apellido"),
-                        resultado.getString("email"),
-                        resultado.getString("telefono"),
-                        resultado.getString("direccion")
+                lista.add(new Compra(
+                        resultado.getInt("id_compra"),
+                        resultado.getDate("fecha").toLocalDate(),
+                        resultado.getString("descripcion_compra"),
+                        resultado.getDouble("total"),
+                        resultado.getDouble("costoU"),
+                        resultado.getInt("cantidad"),
+                        resultado.getInt("id_detalle_compra"),
+                        resultado.getString("nombre_producto")
                 ));
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        } catch (Exception e) {
             e.printStackTrace();
         }
-        return listaClientes = FXCollections.observableArrayList(lista);
+        return FXCollections.observableArrayList(lista);
     }
 
     // */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/* eliminar CLIENTE */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
     // se llama a el procedimiento sp_eliminar_cliente con un nit
-    public void eliminarCliente(int nit) {
+    public void eliminarCompra(int nit) {
         try {
-            PreparedStatement sp = Conexion.getInstance().getConexion().prepareCall("CALL sp_eliminar_cliente(?)");
+            PreparedStatement sp = Conexion.getInstance().getConexion().prepareCall("CALL sp_eliminar_compra(?)");
             sp.setInt(1, nit);
             sp.execute();
         } catch (SQLException e) {

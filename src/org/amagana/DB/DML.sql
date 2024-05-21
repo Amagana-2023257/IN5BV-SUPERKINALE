@@ -479,17 +479,30 @@ END $$
 DELIMITER ;
 
 
--- LISTAR
 DELIMITER $$
+
 CREATE PROCEDURE sp_listar_compras_con_detalle()
 BEGIN
-    SELECT c.id, c.fecha, c.descripcion, c.total, GROUP_CONCAT(CONCAT(p.Descripcion, ' (', dc.cantidad, ')') SEPARATOR ', ') AS detalle_productos
+    -- Seleccionar información de las compras junto con sus detalles
+    SELECT 
+        c.id AS id_compra, 
+        c.fecha, 
+        c.descripcion AS descripcion_compra, 
+        c.total,
+        dc.id AS id_detalle_compra,
+        dc.costoU,
+        dc.cantidad,
+        p.descripcion AS nombre_producto  -- Corregir el nombre de la columna aquí
     FROM Compra c
     INNER JOIN DetalleCompra dc ON c.id = dc.compra
-    INNER JOIN Producto p ON dc.producto = p.id
-    GROUP BY c.id;
+    INNER JOIN Producto p ON dc.producto = p.id;
 END $$
+
 DELIMITER ;
+
+
+DELIMITER ;
+;
 
 -- BUSCAR
 DELIMITER $$
@@ -504,16 +517,20 @@ BEGIN
 END $$
 DELIMITER ;
 
--- ACTUALIZAR (No se incluye la actualización de DetalleCompra en este caso)
 DELIMITER $$
+
 CREATE PROCEDURE sp_actualizar_compra 
 (
     IN _id INT,
     IN _fecha DATE,
     IN _descripcion VARCHAR(60),
-    IN _total DECIMAL(10,2)
+    IN _total DECIMAL(10,2),
+    IN _costoU DECIMAL(10,2),
+    IN _cantidad INT,
+    IN _producto INT
 )
 BEGIN
+    -- Actualizar la tabla Compra
     UPDATE Compra
     SET
         fecha = _fecha,
@@ -521,8 +538,19 @@ BEGIN
         total = _total
     WHERE
         id = _id;
+
+    -- Actualizar la tabla DetalleCompra
+    UPDATE DetalleCompra
+    SET
+        costoU = _costoU,
+        cantidad = _cantidad,
+        producto = _producto
+    WHERE
+        compra = _id;
 END $$
+
 DELIMITER ;
+
 
 -- ELIMINAR
 DELIMITER $$
@@ -683,7 +711,7 @@ CALL sp_actualizar_producto_con_tipo(1, 'Nueva descripción', 12.99, 17.99, 22.9
 CALL sp_crear_compra_con_detalle('2024-05-08', 'Descripción de la compra', 100.50, 1, 5, 10.25);
 CALL sp_listar_compras_con_detalle();
 CALL sp_buscar_compra_con_detalle(1);
-CALL sp_actualizar_compra(1, '2024-05-09', 'Nueva descripción de la compra', 150.75);
+CALL sp_actualizar_compra(1, '2024-05-09', 'Nueva descripción de la compra', 150.75, 10.5, 1, 1);
 
 CALL sp_crear_factura_con_detalle('Estado de la factura', 250.75, '2024-05-08', 123456789, 1, 1, 1, 10.25);
 CALL sp_listar_facturas_con_detalle();

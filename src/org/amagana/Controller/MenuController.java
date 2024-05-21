@@ -44,7 +44,7 @@ public class MenuController implements Initializable {
     private Button btnProducto, btnProveedor, btnCliente, btnCompra;
 
     @FXML
-    private MenuItem btnInfo;
+    private MenuItem btnInfo, btnEmpleado;
     
     // */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/* OBJETOS DE OTRAS CLASES */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
     
@@ -77,6 +77,8 @@ public class MenuController implements Initializable {
             main.compraView();
         }else if (event.getSource() == btnProducto) {
             main.productoView();
+        }else if (event.getSource() == btnEmpleado) {
+            main.empleadoView();
         }
         
     }
