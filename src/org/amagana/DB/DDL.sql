@@ -1,5 +1,7 @@
 drop database if exists SuperKinal;
 
+-- ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'admi';
+
 create database if not exists SuperKinal;
 
 -- Activar el uso del predeterminado de la base de datos

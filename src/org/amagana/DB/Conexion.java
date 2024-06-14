@@ -51,7 +51,7 @@ public class Conexion {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
             conexion = DriverManager.getConnection
-        ("jdbc:mysql://localhost:3306/SuperKinal?useSSL=false","root","admin");
+        ("jdbc:mysql://localhost:3306/SuperKinal?useSSL=false","root","admi");
         } catch (ClassNotFoundException | SQLException
                 | InstantiationException | IllegalAccessException e) {
             e.printStackTrace(); 

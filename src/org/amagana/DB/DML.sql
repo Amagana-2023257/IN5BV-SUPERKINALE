@@ -688,7 +688,7 @@ DELIMITER ;
 
 -- //*/*/*/*/*/*/*/*/*/*/*/*/*/*/* CALL */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
 -- Llamados a procedimientos almacenados
-CALL sp_crear_cliente(123456789, 'Juan', 'Pérez', 'juan@example.com', '1234567890', 'Calle 123, Ciudad');
+CALL sp_crear_cliente(1789, 'Juan', 'Pérez', 'juan@example.com', '1234567890', 'Calle 123, Ciudad');
 CALL sp_listar_clientes();
 CALL sp_buscar_cliente(123456789);
 CALL sp_actualizar_cliente(123456789, 'Juan', 'Pérez', 'nuevo_email@example.com', '9876543210', 'Nueva dirección');

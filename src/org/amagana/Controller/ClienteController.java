@@ -5,6 +5,8 @@ package org.amagana.Controller;
 import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,6 +22,7 @@ import javax.swing.JOptionPane;
 import org.amagana.DB.Conexion;
 import org.amagana.Bean.Cliente;
 import org.amagana.Controller.Notificacion;
+import org.amagana.Report.GenerarReportes;
 import org.amagana.System.Main;
 
 
@@ -189,6 +192,9 @@ public class ClienteController implements Initializable {
 
     public void reporte() {
         switch (tipoDeOperaciones) {
+            case NINGUNO:
+                imprimirReporte();
+                break;
             case ACTUALIZAR:
                 desactivarControles();
                 limpiarControles();
@@ -201,6 +207,13 @@ public class ClienteController implements Initializable {
                 cargarDatos();
                 break;
         }
+    }
+    
+     public void imprimirReporte(){
+        
+        Map parametros = new HashMap();
+        parametros.put("nit", null);
+        GenerarReportes.mostrarRepsorters("ReporteClientes.jasper", "Reporte de los clientes", parametros);
     }
 
     // Controles de la tabla
