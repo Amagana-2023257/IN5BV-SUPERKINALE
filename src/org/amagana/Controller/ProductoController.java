@@ -272,6 +272,7 @@ public class ProductoController implements Initializable {
             sp.setString(7, p.getProveedor());
             sp.setString(8, p.getTipoProducto());
             sp.execute();
+            
             cargarDatos();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());

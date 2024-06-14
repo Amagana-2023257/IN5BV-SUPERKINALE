@@ -7,13 +7,15 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="tablaView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="594.0" prefWidth="1121.0" styleClass="panel" stylesheets="@../Util/Panel.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amagana.Controller.ProductoController">
+<AnchorPane fx:id="tablaView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="594.0" prefWidth="928.0" styleClass="panel" stylesheets="@../Util/Panel.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amagana.Controller.ProductoController">
    <children>
-      <VBox layoutX="14.0" layoutY="90.0" prefHeight="483.0" prefWidth="302.0" styleClass="BVox" stylesheets="@../Util/VBox.css">
+      <VBox layoutX="14.0" layoutY="90.0" prefHeight="313.0" prefWidth="302.0" styleClass="BVox" stylesheets="@../Util/VBox.css">
          <children>
             <Label stylesheets="@../Util/fondo.css" text="Acciones:" />
             <Button fx:id="btnAgregar" mnemonicParsing="false" onAction="#agregar" prefHeight="50.0" prefWidth="278.0" stylesheets="@../Util/Button.css" text="Agregar" />
@@ -24,23 +26,23 @@
             <Button fx:id="btnMenu" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="50.0" prefWidth="278.0" stylesheets="@../Util/Button.css" text="Menu" />
          </children>
       </VBox>
-      <Pane prefHeight="66.0" prefWidth="1109.0" styleClass="panel" stylesheets="@../Util/PanelTitulo.css">
+      <Pane prefHeight="66.0" prefWidth="928.0" styleClass="panel" stylesheets="@../Util/PanelTitulo.css">
          <children>
             <Label layoutX="14.0" layoutY="9.0" prefHeight="16.0" prefWidth="186.0" stylesheets="@../Util/LabelTitulo.css" text="Producto" />
          </children>
       </Pane>
-      <ScrollPane layoutX="335.0" layoutY="86.0" prefHeight="485.0" prefWidth="361.0">
+      <ScrollPane layoutX="11.0" layoutY="417.0" prefHeight="154.0" prefWidth="906.0">
          <content>
-            <TableView fx:id="tblProductos" onMouseClicked="#seleccionarElementos" prefHeight="483.0" prefWidth="600.0" stylesheets="@../Util/TableView.css">
+            <TableView fx:id="tblProductos" onMouseClicked="#seleccionarElementos" prefHeight="350.0" prefWidth="889.0" stylesheets="@../Util/TableView.css">
               <columns>
-                <TableColumn fx:id="colId" prefWidth="75.0" text="ID" />
-                <TableColumn fx:id="colDescripcion" prefWidth="75.0" text="DESCRIPCION" />
-                  <TableColumn fx:id="colPrecioU" prefWidth="75.0" text="PRECIO UNIDAD" />
-                  <TableColumn fx:id="colPrecioM" prefWidth="75.0" text="PRECIO MAYOR" />
-                  <TableColumn fx:id="colImagenP" prefWidth="75.0" text="IMAGEN" />
-                  <TableColumn fx:id="colExistencia" prefWidth="75.0" text="EXISTENCIA" />
-                  <TableColumn fx:id="colProveedor" prefWidth="75.0" text="PROVEEDOR" />
-                  <TableColumn fx:id="colTipoProducto" prefWidth="75.0" text="TIPO PROVEEDOR" />
+                <TableColumn fx:id="colId" prefWidth="50.0" text="ID" />
+                <TableColumn fx:id="colDescripcion" prefWidth="120.0" text="DESCRIPCION" />
+                  <TableColumn fx:id="colPrecioU" prefWidth="120.0" text="PRECIO UNIDAD" />
+                  <TableColumn fx:id="colPrecioM" prefWidth="120.0" text="PRECIO MAYOR" />
+                  <TableColumn fx:id="colImagenP" prefWidth="120.0" text="IMAGEN" />
+                  <TableColumn fx:id="colExistencia" prefWidth="120.0" text="EXISTENCIA" />
+                  <TableColumn fx:id="colProveedor" prefWidth="120.0" text="PROVEEDOR" />
+                  <TableColumn fx:id="colTipoProducto" prefWidth="120.0" text="TIPO PROVEEDOR" />
               </columns>
                <styleClass>
                   <String fx:value="cell" />
@@ -51,7 +53,7 @@
             </TableView>
          </content>
       </ScrollPane>
-      <ScrollPane layoutX="709.0" layoutY="105.0" prefHeight="468.0" prefWidth="400.0" stylesheets="@../Util/ScrollPane.css">
+      <ScrollPane layoutX="514.0" layoutY="90.0" prefHeight="313.0" prefWidth="400.0" stylesheets="@../Util/ScrollPane.css">
          <content>
             <VBox prefHeight="516.0" prefWidth="350.0" styleClass="BVox" stylesheets="@../Util/VBox.css">
                <children>
@@ -77,5 +79,10 @@
             </VBox>
          </content>
       </ScrollPane>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="348.0" layoutY="154.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Image/_6bd7e0cb-9b86-4cda-856d-5bb2ae95b68b-Photoroom.png-Photoroom.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

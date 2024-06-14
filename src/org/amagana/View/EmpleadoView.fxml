@@ -7,13 +7,15 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="tablaView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="594.0" prefWidth="1121.0" styleClass="panel" stylesheets="@../Util/Panel.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amagana.Controller.EmpleadoController">
+<AnchorPane fx:id="tablaView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="594.0" prefWidth="975.0" styleClass="panel" stylesheets="@../Util/Panel.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.amagana.Controller.EmpleadoController">
    <children>
-      <VBox layoutX="14.0" layoutY="90.0" prefHeight="483.0" prefWidth="302.0" styleClass="BVox" stylesheets="@../Util/VBox.css">
+      <VBox layoutX="14.0" layoutY="90.0" prefHeight="315.0" prefWidth="302.0" styleClass="BVox" stylesheets="@../Util/VBox.css">
          <children>
             <Label stylesheets="@../Util/fondo.css" text="Acciones:" />
             <Button fx:id="btnAgregar" mnemonicParsing="false" onAction="#agregar" prefHeight="50.0" prefWidth="278.0" stylesheets="@../Util/Button.css" text="Agregar" />
@@ -24,23 +26,23 @@
             <Button fx:id="btnMenu" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="50.0" prefWidth="278.0" stylesheets="@../Util/Button.css" text="Menu" />
          </children>
       </VBox>
-      <Pane prefHeight="66.0" prefWidth="1109.0" styleClass="panel" stylesheets="@../Util/PanelTitulo.css">
+      <Pane prefHeight="66.0" prefWidth="975.0" styleClass="panel" stylesheets="@../Util/PanelTitulo.css">
          <children>
             <Label layoutX="14.0" layoutY="9.0" prefHeight="16.0" prefWidth="186.0" stylesheets="@../Util/LabelTitulo.css" text="Empleado" />
          </children>
       </Pane>
-      <ScrollPane layoutX="335.0" layoutY="86.0" prefHeight="485.0" prefWidth="369.0">
+      <ScrollPane layoutX="17.0" layoutY="426.0" prefHeight="145.0" prefWidth="943.0">
          <content>
-            <TableView fx:id="tblEmpleados" onMouseClicked="#seleccionarElementos" prefHeight="483.0" prefWidth="580.0" stylesheets="@../Util/TableView.css">
+            <TableView fx:id="tblEmpleados" onMouseClicked="#seleccionarElementos" prefHeight="483.0" prefWidth="927.0" stylesheets="@../Util/TableView.css">
               <columns>
                 <TableColumn fx:id="colId" prefWidth="75.0" text="ID" />
-                <TableColumn fx:id="colNombre" prefWidth="75.0" text="NOMBRE" />
-                  <TableColumn fx:id="colApellido" prefWidth="75.0" text="APELLIDO" />
-                  <TableColumn fx:id="colDireccion" prefWidth="75.0" text="DIRECCION" />
-                  <TableColumn fx:id="colTurno" prefWidth="75.0" text="TURNO" />
-                  <TableColumn fx:id="colNombreCargo" prefWidth="75.0" text="NOMBRE CARGO" />
-                  <TableColumn fx:id="colDescripcionCargo" prefWidth="75.0" text="DESCRIPCION CARGO" />
-                  <TableColumn fx:id="colSueldo" prefWidth="75.0" text="SUELDO" />
+                <TableColumn fx:id="colNombre" prefWidth="100.0" text="NOMBRE" />
+                  <TableColumn fx:id="colApellido" prefWidth="100.0" text="APELLIDO" />
+                  <TableColumn fx:id="colDireccion" prefWidth="100.0" text="DIRECCION" />
+                  <TableColumn fx:id="colTurno" prefWidth="100.0" text="TURNO" />
+                  <TableColumn fx:id="colNombreCargo" prefWidth="150.0" text="NOMBRE CARGO" />
+                  <TableColumn fx:id="colDescripcionCargo" prefWidth="200.0" text="DESCRIPCION CARGO" />
+                  <TableColumn fx:id="colSueldo" prefWidth="100.0" text="SUELDO" />
               </columns>
                <styleClass>
                   <String fx:value="cell" />
@@ -51,7 +53,7 @@
             </TableView>
          </content>
       </ScrollPane>
-      <ScrollPane layoutX="709.0" layoutY="95.0" prefHeight="468.0" prefWidth="400.0" stylesheets="@../Util/ScrollPane.css">
+      <ScrollPane layoutX="561.0" layoutY="90.0" prefHeight="315.0" prefWidth="400.0" stylesheets="@../Util/ScrollPane.css">
          <content>
             <VBox prefHeight="516.0" prefWidth="350.0" styleClass="BVox" stylesheets="@../Util/VBox.css">
                <children>
@@ -69,11 +71,16 @@
                   <TextField fx:id="txtTurno" prefHeight="50.0" prefWidth="197.0" styleClass="text-field" stylesheets="@../Util/TextField.css" />
                   <Label prefHeight="47.0" prefWidth="405.0" stylesheets="@../Util/Label.css" text="Nombre Cargo" />
                   <TextField fx:id="txtNombreCargo" prefHeight="50.0" prefWidth="197.0" styleClass="text-field" stylesheets="@../Util/TextField.css" />
-                  <Label prefHeight="47.0" prefWidth="405.0" stylesheets="@../Util/Label.css" text="Descrip Cargo" />
+                  <Label prefHeight="47.0" prefWidth="405.0" stylesheets="@../Util/Label.css" text="Descripcion Cargo" />
                   <TextField fx:id="txtDescripcionCargo" layoutX="27.0" layoutY="398.0" prefHeight="50.0" prefWidth="197.0" styleClass="text-field" stylesheets="@../Util/TextField.css" />
                </children>
             </VBox>
          </content>
       </ScrollPane>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="377.0" layoutY="173.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Image/_6bd7e0cb-9b86-4cda-856d-5bb2ae95b68b-Photoroom.png-Photoroom.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

@@ -120,7 +120,7 @@ public class Main extends Application {
     
     public void clienteView() {
         try {
-            ClienteController clienteView = (ClienteController) cambiarEscena("ClientesView.fxml", 760, 820);
+            ClienteController clienteView = (ClienteController) cambiarEscena("ClientesView.fxml", 746, 610);
             clienteView.setMain(this);
         } catch (Exception e) {
             e.printStackTrace();
@@ -144,7 +144,7 @@ public class Main extends Application {
     
     public void productoView() {
         try {
-            ProductoController ProductoView = (ProductoController) cambiarEscena("ProductoView.fxml", 1121, 594);
+            ProductoController ProductoView = (ProductoController) cambiarEscena("ProductoView.fxml", 928, 594);
             ProductoView.setMain(this);
         } catch (Exception e) {
             e.printStackTrace();
@@ -156,7 +156,7 @@ public class Main extends Application {
     
     public void proveedorView() {
         try {
-            ProveedorController proveedorView = (ProveedorController) cambiarEscena("ProveedorView.fxml", 800, 830);
+            ProveedorController proveedorView = (ProveedorController) cambiarEscena("ProveedorView.fxml", 1364, 700);
             proveedorView.setMain(this);
         } catch (Exception e) {
             e.printStackTrace();
@@ -168,7 +168,7 @@ public class Main extends Application {
     
     public void compraView() {
         try {
-            CompraController compraView = (CompraController) cambiarEscena("CompraView.fxml", 1121, 594);
+            CompraController compraView = (CompraController) cambiarEscena("CompraView.fxml", 1025, 594);
             compraView.setMain(this);
         } catch (Exception e) {
             e.printStackTrace();
@@ -178,7 +178,7 @@ public class Main extends Application {
     
     public void empleadoView() {
         try {
-            EmpleadoController sobreView = (EmpleadoController) cambiarEscena("EmpleadoView.fxml", 1200, 600);
+            EmpleadoController sobreView = (EmpleadoController) cambiarEscena("EmpleadoView.fxml", 975, 692);
             sobreView.setMain(this);
         } catch (Exception e) {
             e.printStackTrace();
