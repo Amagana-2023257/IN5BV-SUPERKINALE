@@ -4,6 +4,8 @@ package org.amagana.Controller;
 import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,6 +21,7 @@ import javax.swing.JOptionPane;
 import org.amagana.Bean.Proveedor;
 import org.amagana.System.Main;
 import org.amagana.DB.Conexion;
+import org.amagana.Report.GenerarReportes;
 
 /**
  * @author Leonel .--------------------------------------------------------.
@@ -163,6 +166,9 @@ public class ProveedorController implements Initializable {
     // */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/* BTN REPORTE CLIENTE */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
     public void reporte() {
         switch (tipoDeOperaciones) {
+            case NINGUNO:
+                imprimirReporte();
+                break;
             case ACTUALIZAR:
                 desactivarControles();
                 limpiarControles();
@@ -175,6 +181,13 @@ public class ProveedorController implements Initializable {
                 cargarDatos();
                 break;
         }
+    }
+    
+    public void imprimirReporte(){
+        
+        Map parametros = new HashMap();
+        parametros.put("id", null);
+        GenerarReportes.mostrarRepsorters("ReporteProveedores.jasper", "Reporte de los Proveedores", parametros);
     }
 
     // Controles de la tabla

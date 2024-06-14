@@ -4,6 +4,8 @@ package org.amagana.Controller;
 import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,6 +21,7 @@ import javax.swing.JOptionPane;
 import org.amagana.Bean.Producto;
 import org.amagana.System.Main;
 import org.amagana.DB.Conexion;
+import org.amagana.Report.GenerarReportes;
 
 /**
  * @author Leonel .--------------------------------------------------------.
@@ -164,6 +167,9 @@ public class ProductoController implements Initializable {
     // */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/* BTN REPORTE PRODUCTO */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
     public void reporte() {
         switch (tipoDeOperaciones) {
+            case NINGUNO:
+                imprimirReporte();
+                break;
             case ACTUALIZAR:
                 desactivarControles();
                 limpiarControles();
@@ -176,6 +182,13 @@ public class ProductoController implements Initializable {
                 cargarDatos();
                 break;
         }
+    }
+    
+    public void imprimirReporte(){
+        
+        Map parametros = new HashMap();
+        parametros.put("id", null);
+        GenerarReportes.mostrarRepsorters("ReporteProductos.jasper", "Reporte de los Productos", parametros);
     }
 
     // Controles de la tabla
@@ -247,6 +260,7 @@ public class ProductoController implements Initializable {
         p.setExistencia(Integer.parseInt(txtExistencia.getText()));
         p.setProveedor(txtProveedor.getText());
         p.setTipoProducto(txtTipoProducto.getText());
+        
         try {
             PreparedStatement sp = Conexion.getInstance().getConexion().prepareCall("CALL sp_crear_producto_con_tipo(?, ?, ?, ?, ?, ?, ?, ?)");
             sp.setString(1, p.getDescripcion());

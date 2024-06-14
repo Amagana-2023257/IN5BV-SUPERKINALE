@@ -479,17 +479,30 @@ END $$
 DELIMITER ;
 
 
--- LISTAR
 DELIMITER $$
+
 CREATE PROCEDURE sp_listar_compras_con_detalle()
 BEGIN
-    SELECT c.id, c.fecha, c.descripcion, c.total, GROUP_CONCAT(CONCAT(p.Descripcion, ' (', dc.cantidad, ')') SEPARATOR ', ') AS detalle_productos
+    -- Seleccionar información de las compras junto con sus detalles
+    SELECT 
+        c.id AS id_compra, 
+        c.fecha, 
+        c.descripcion AS descripcion_compra, 
+        c.total,
+        dc.id AS id_detalle_compra,
+        dc.costoU,
+        dc.cantidad,
+        p.descripcion AS nombre_producto  -- Corregir el nombre de la columna aquí
     FROM Compra c
     INNER JOIN DetalleCompra dc ON c.id = dc.compra
-    INNER JOIN Producto p ON dc.producto = p.id
-    GROUP BY c.id;
+    INNER JOIN Producto p ON dc.producto = p.id;
 END $$
+
 DELIMITER ;
+
+
+DELIMITER ;
+;
 
 -- BUSCAR
 DELIMITER $$
@@ -504,16 +517,20 @@ BEGIN
 END $$
 DELIMITER ;
 
--- ACTUALIZAR (No se incluye la actualización de DetalleCompra en este caso)
 DELIMITER $$
+
 CREATE PROCEDURE sp_actualizar_compra 
 (
     IN _id INT,
     IN _fecha DATE,
     IN _descripcion VARCHAR(60),
-    IN _total DECIMAL(10,2)
+    IN _total DECIMAL(10,2),
+    IN _costoU DECIMAL(10,2),
+    IN _cantidad INT,
+    IN _producto INT
 )
 BEGIN
+    -- Actualizar la tabla Compra
     UPDATE Compra
     SET
         fecha = _fecha,
@@ -521,8 +538,19 @@ BEGIN
         total = _total
     WHERE
         id = _id;
+
+    -- Actualizar la tabla DetalleCompra
+    UPDATE DetalleCompra
+    SET
+        costoU = _costoU,
+        cantidad = _cantidad,
+        producto = _producto
+    WHERE
+        compra = _id;
 END $$
+
 DELIMITER ;
+
 
 -- ELIMINAR
 DELIMITER $$
@@ -583,6 +611,7 @@ CREATE PROCEDURE sp_listar_facturas_con_detalle()
 BEGIN
     SELECT f.id, f.estado, f.total, f.fecha, c.nit AS cliente_nit, CONCAT(c.nombre, ' ', c.apellido) AS cliente_nombre, e.nombre AS empleado_nombre, e.apellido AS empleado_apellido, GROUP_CONCAT(CONCAT(p.Descripcion, ' (', df.cantidad, ')') SEPARATOR ', ') AS detalle_productos
     FROM Factura f
+    
     INNER JOIN Cliente c ON f.cliente = c.nit
     INNER JOIN Empleado e ON f.empleado = e.id
     INNER JOIN DetalleFactura df ON f.id = df.factura
@@ -642,6 +671,8 @@ END $$
 DELIMITER ;
 
 
+
+
 -- ELIMINAR (Incluyendo la eliminación de DetalleFactura)
 DELIMITER $$
 CREATE PROCEDURE sp_eliminar_factura(IN _id INT)
@@ -660,7 +691,7 @@ DELIMITER ;
 
 -- //*/*/*/*/*/*/*/*/*/*/*/*/*/*/* CALL */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
 -- Llamados a procedimientos almacenados
-CALL sp_crear_cliente(123456789, 'Juan', 'Pérez', 'juan@example.com', '1234567890', 'Calle 123, Ciudad');
+CALL sp_crear_cliente(1789, 'Juan', 'Pérez', 'juan@example.com', '1234567890', 'Calle 123, Ciudad');
 CALL sp_listar_clientes();
 CALL sp_buscar_cliente(123456789);
 CALL sp_actualizar_cliente(123456789, 'Juan', 'Pérez', 'nuevo_email@example.com', '9876543210', 'Nueva dirección');
@@ -683,9 +714,9 @@ CALL sp_actualizar_producto_con_tipo(1, 'Nueva descripción', 12.99, 17.99, 22.9
 CALL sp_crear_compra_con_detalle('2024-05-08', 'Descripción de la compra', 100.50, 1, 5, 10.25);
 CALL sp_listar_compras_con_detalle();
 CALL sp_buscar_compra_con_detalle(1);
-CALL sp_actualizar_compra(1, '2024-05-09', 'Nueva descripción de la compra', 150.75);
+CALL sp_actualizar_compra(1, '2024-05-09', 'Nueva descripción de la compra', 150.75, 10.5, 1, 1);
 
-CALL sp_crear_factura_con_detalle('Estado de la factura', 250.75, '2024-05-08', 123456789, 1, 1, 1, 10.25);
+CALL sp_crear_factura_con_detalle('Estado de la factura', 250.75, '2024-05-08', 123456789, 1, 1, 1, 10.25);   
 CALL sp_listar_facturas_con_detalle();
 CALL sp_buscar_factura_con_detalle(1);
 CALL sp_actualizar_factura(1, 'Nuevo estado', 150.25, '2024-05-08', 123456789, 1, 1, 5, 10.25);
@@ -695,4 +726,109 @@ CALL sp_crear_usuario('a', 'Perez', 'Administrador', '1');
 
 set global time_zone = '-6:00';
 
+-- Funciones
+
+DELIMITER $$
+
+CREATE FUNCTION CalcularPreciosProductos(total DECIMAL(10,2), cantidad INT)
+RETURNS DECIMAL(10,2)
+DETERMINISTIC
+BEGIN
+    DECLARE precio DECIMAL(10,2);
+    SET precio = total / cantidad;
+    RETURN precio;
+END ;
+
+CREATE FUNCTION CalcularExistenciaProductos(idProducto INT, cantidad INT)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE existenciaActual INT;
+    SELECT existencia INTO existenciaActual FROM Producto WHERE id = idProducto;
+    SET existenciaActual = existenciaActual + cantidad;
+    RETURN existenciaActual;
+END $$
+
+DELIMITER ;
+
+
+-- Triggers
+
+DELIMITER $$
+
+CREATE TRIGGER TriggerDetalleCompra AFTER INSERT ON DetalleCompra
+FOR EACH ROW
+BEGIN
+    DECLARE totalCompra DECIMAL(10,2);
+    DECLARE cantidadCompra INT;
+    DECLARE idProducto INT;
+
+    SELECT costoU, cantidad, producto INTO totalCompra, cantidadCompra, idProducto FROM DetalleCompra WHERE id = NEW.id;
+
+    -- Actualizar precios de productos
+    UPDATE Producto
+    SET precioU = CalcularPreciosProductos(totalCompra, cantidadCompra),
+        precioD = CalcularPreciosProductos(totalCompra * 12, cantidadCompra * 12),
+        precioM = CalcularPreciosProductos(totalCompra * 20, cantidadCompra * 20)
+    WHERE id = idProducto;
+
+    -- Actualizar existencia de productos
+    UPDATE Producto
+    SET existencia = CalcularExistenciaProductos(idProducto, cantidadCompra)
+    WHERE id = idProducto;
+END $$
+
+
+
+CREATE TRIGGER TriggerDetalleFactura BEFORE INSERT ON DetalleFactura
+FOR EACH ROW
+BEGIN
+    DECLARE idProducto INT;
+
+    SELECT producto INTO idProducto FROM DetalleFactura WHERE id = NEW.id;
+
+    -- Obtener precio unitario del producto
+    SELECT precioU INTO NEW.precioU FROM Producto WHERE id = idProducto;
+END ;
+
+
+
+CREATE TRIGGER TriggerTotalDocumento AFTER INSERT ON DetalleCompra
+FOR EACH ROW
+BEGIN
+    DECLARE totalDocumento DECIMAL(10,2);
+    DECLARE idCompra INT;
+
+    SELECT compra INTO idCompra FROM DetalleCompra WHERE id = NEW.id;
+
+    -- Calcular total del documento
+    SELECT SUM(costoU * cantidad) INTO totalDocumento FROM DetalleCompra WHERE compra = idCompra;
+
+    -- Actualizar total del documento en Compra
+    UPDATE Compra
+    SET total = totalDocumento
+    WHERE id = idCompra;
+END ;
+
+
+
+
+CREATE TRIGGER TriggerTotalFactura AFTER INSERT ON DetalleFactura
+FOR EACH ROW
+BEGIN
+    DECLARE totalFactura DECIMAL(10,2);
+    DECLARE idFactura INT;
+
+    SELECT factura INTO idFactura FROM DetalleFactura WHERE id = NEW.id;
+
+    -- Calcular total de la factura
+    SELECT SUM(precioU * cantidad) INTO totalFactura FROM DetalleFactura WHERE factura = idFactura;
+
+    -- Actualizar total de la factura en Factura
+    UPDATE Factura
+    SET total = totalFactura
+    WHERE id = idFactura;
+END 
+
+DELIMITER ;
 

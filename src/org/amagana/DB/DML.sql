@@ -611,6 +611,7 @@ CREATE PROCEDURE sp_listar_facturas_con_detalle()
 BEGIN
     SELECT f.id, f.estado, f.total, f.fecha, c.nit AS cliente_nit, CONCAT(c.nombre, ' ', c.apellido) AS cliente_nombre, e.nombre AS empleado_nombre, e.apellido AS empleado_apellido, GROUP_CONCAT(CONCAT(p.Descripcion, ' (', df.cantidad, ')') SEPARATOR ', ') AS detalle_productos
     FROM Factura f
+    
     INNER JOIN Cliente c ON f.cliente = c.nit
     INNER JOIN Empleado e ON f.empleado = e.id
     INNER JOIN DetalleFactura df ON f.id = df.factura
@@ -670,6 +671,8 @@ END $$
 DELIMITER ;
 
 
+
+
 -- ELIMINAR (Incluyendo la eliminación de DetalleFactura)
 DELIMITER $$
 CREATE PROCEDURE sp_eliminar_factura(IN _id INT)
@@ -713,7 +716,7 @@ CALL sp_listar_compras_con_detalle();
 CALL sp_buscar_compra_con_detalle(1);
 CALL sp_actualizar_compra(1, '2024-05-09', 'Nueva descripción de la compra', 150.75, 10.5, 1, 1);
 
-CALL sp_crear_factura_con_detalle('Estado de la factura', 250.75, '2024-05-08', 123456789, 1, 1, 1, 10.25);
+CALL sp_crear_factura_con_detalle('Estado de la factura', 250.75, '2024-05-08', 123456789, 1, 1, 1, 10.25);   
 CALL sp_listar_facturas_con_detalle();
 CALL sp_buscar_factura_con_detalle(1);
 CALL sp_actualizar_factura(1, 'Nuevo estado', 150.25, '2024-05-08', 123456789, 1, 1, 5, 10.25);
@@ -775,6 +778,8 @@ BEGIN
     WHERE id = idProducto;
 END $$
 
+
+
 CREATE TRIGGER TriggerDetalleFactura BEFORE INSERT ON DetalleFactura
 FOR EACH ROW
 BEGIN
@@ -785,6 +790,8 @@ BEGIN
     -- Obtener precio unitario del producto
     SELECT precioU INTO NEW.precioU FROM Producto WHERE id = idProducto;
 END ;
+
+
 
 CREATE TRIGGER TriggerTotalDocumento AFTER INSERT ON DetalleCompra
 FOR EACH ROW
@@ -802,6 +809,9 @@ BEGIN
     SET total = totalDocumento
     WHERE id = idCompra;
 END ;
+
+
+
 
 CREATE TRIGGER TriggerTotalFactura AFTER INSERT ON DetalleFactura
 FOR EACH ROW

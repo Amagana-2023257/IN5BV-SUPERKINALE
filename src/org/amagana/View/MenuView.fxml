@@ -25,12 +25,7 @@
             </ImageView>
             <MenuBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="0.0" prefWidth="1920.0" style="-fx-background-color: #F26F63;">
                <menus>
-                  <Menu mnemonicParsing="false" text="Registros">
-                     <items>
-                        <MenuItem fx:id="btnRegistroProducto" mnemonicParsing="false" text="Producto" />
-                        <MenuItem fx:id="btnProductoEliminado" mnemonicParsing="false" text="ProductosEliminados" />
-                     </items>
-                  </Menu>
+                  <Menu mnemonicParsing="false" text="Registros" />
                   <Menu mnemonicParsing="false" text="Sistema">
                      <items>
                         <MenuItem fx:id="btnInfo" mnemonicParsing="false" onAction="#handleButtonAction" text="About">

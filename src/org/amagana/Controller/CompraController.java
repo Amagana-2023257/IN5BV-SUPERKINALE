@@ -19,10 +19,13 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javax.swing.JOptionPane;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import org.amagana.DB.Conexion;
 import org.amagana.Bean.Cliente;
 import org.amagana.Bean.Compra;
 import org.amagana.Controller.Notificacion;
+import org.amagana.Report.GenerarReportes;
 import org.amagana.System.Main;
 
 /**
@@ -170,6 +173,9 @@ public class CompraController implements Initializable {
     // */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/* BTN REPORTE CLIENTE */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
     public void reporte() {
         switch (tipoDeOperaciones) {
+            case NINGUNO:
+                imprimirReporte();
+                break;
             case ACTUALIZAR:
                 desactivarControles();
                 limpiarControles();
@@ -182,6 +188,13 @@ public class CompraController implements Initializable {
                 cargarDatos();
                 break;
         }
+    }
+    
+    public void imprimirReporte(){
+        
+        Map parametros = new HashMap();
+        parametros.put("id", null);
+        GenerarReportes.mostrarRepsorters("ReporteCompras.jasper", "Reporte de los clientes", parametros);
     }
 
     // Controles de la tabla

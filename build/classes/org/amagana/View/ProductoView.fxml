@@ -22,7 +22,6 @@
             <Button fx:id="btnReportes" mnemonicParsing="false" onAction="#reporte" prefHeight="50.0" prefWidth="322.0" stylesheets="@../Util/Button.css" text="Reportes" />
             <Label prefHeight="192.0" prefWidth="268.0" />
             <Button fx:id="btnMenu" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="50.0" prefWidth="278.0" stylesheets="@../Util/Button.css" text="Menu" />
-            <Button fx:id="btnEliminar1" layoutX="27.0" layoutY="85.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="285.0" stylesheets="@../Util/Button.css" text="Eliminar" />
          </children>
       </VBox>
       <Pane prefHeight="66.0" prefWidth="1109.0" styleClass="panel" stylesheets="@../Util/PanelTitulo.css">
@@ -52,7 +51,7 @@
             </TableView>
          </content>
       </ScrollPane>
-      <ScrollPane layoutX="709.0" layoutY="95.0" prefHeight="468.0" prefWidth="400.0" stylesheets="@../Util/ScrollPane.css">
+      <ScrollPane layoutX="709.0" layoutY="105.0" prefHeight="468.0" prefWidth="400.0" stylesheets="@../Util/ScrollPane.css">
          <content>
             <VBox prefHeight="516.0" prefWidth="350.0" styleClass="BVox" stylesheets="@../Util/VBox.css">
                <children>
@@ -72,6 +71,8 @@
                   <TextField fx:id="txtProveedor" prefHeight="50.0" prefWidth="197.0" styleClass="text-field" stylesheets="@../Util/TextField.css" />
                   <Label prefHeight="47.0" prefWidth="402.0" stylesheets="@../Util/Label.css" text="Tipo Proveedor:" />
                   <TextField fx:id="txtTipoProducto" prefHeight="50.0" prefWidth="197.0" styleClass="text-field" stylesheets="@../Util/TextField.css" />
+                  <Label prefHeight="47.0" prefWidth="413.0" stylesheets="@../Util/Label.css" text="Precio por Docena:" />
+                  <TextField fx:id="txtPrecioD" prefHeight="50.0" prefWidth="197.0" styleClass="text-field" stylesheets="@../Util/TextField.css" />
                </children>
             </VBox>
          </content>

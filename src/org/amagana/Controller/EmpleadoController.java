@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,6 +22,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javax.swing.JOptionPane;
 import org.amagana.Bean.Empleado;
 import org.amagana.DB.Conexion;
+import org.amagana.Report.GenerarReportes;
 import org.amagana.System.Main;
 
 public class EmpleadoController implements Initializable {
@@ -145,17 +148,29 @@ public class EmpleadoController implements Initializable {
     }
 
     public void reporte() {
-        if (tipoDeOperacion == Operaciones.EDITAR) {
-            desactivarControles();
-            limpiarControles();
-            btnEditar.setText("Editar");
-            btnReportes.setText("Reportes");
-            btnAgregar.setDisable(false);
-            btnEliminar.setDisable(false);
-            btnEditar.setDisable(false);
-            tipoDeOperacion = Operaciones.NINGUNO;
-            cargarDatos();
+        switch (tipoDeOperacion) {
+            case NINGUNO:
+                imprimirReporte();
+                break;
+            case AGREGAR:
+                desactivarControles();
+                limpiarControles();
+                btnEditar.setText("Editar");
+                btnReportes.setText("Reportes");
+                btnAgregar.setDisable(false);
+                btnEliminar.setDisable(false);
+                btnEditar.setDisable(false);
+                tipoDeOperacion = Operaciones.NINGUNO;
+                cargarDatos();
+                break;
         }
+    }
+    
+    public void imprimirReporte(){
+        
+        Map parametros = new HashMap();
+        parametros.put("id", null);
+        GenerarReportes.mostrarRepsorters("ReporteEmpleados.jasper", "Reporte de los Empleados", parametros);
     }
 
     public void cargarDatos() {

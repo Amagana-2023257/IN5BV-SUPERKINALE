@@ -42,7 +42,15 @@
 		</band>
 	</title>
 	<pageHeader>
-		<band height="96" splitType="Stretch"/>
+		<band height="96" splitType="Stretch">
+			<staticText>
+				<reportElement x="93" y="76" width="100" height="20" uuid="6c6faaa1-0847-4358-8041-29e869ea8772"/>
+				<textElement>
+					<font fontName="Arial Black" size="13"/>
+				</textElement>
+				<text><![CDATA[Compras:]]></text>
+			</staticText>
+		</band>
 	</pageHeader>
 	<columnHeader>
 		<band height="31" splitType="Stretch">
